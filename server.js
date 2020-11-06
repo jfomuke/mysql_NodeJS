@@ -34,11 +34,9 @@ function encryptPassword(passwordToEncrypt)
 // Create route to main page that connects to database.  
 app.get('/', async (req, res) => 
 {
-    connection.connect();
     // Retrieve all entries from database, then serve the result as a JSON type on the page
     connection.query('SELECT * FROM budget', function (error, results, fields)
     {
-        connection.end();
         if (error == true) throw error;
         res.json(results);
     });
@@ -49,50 +47,20 @@ app.get('/', async (req, res) =>
 // Create route to main page that connects to database.  
 app.get('/api/signup', async (req, res) => 
 {
-    const date = transformDate();
+   //const {username, password} = res.body;
 
-    const {username, password} = res.body;
-    //Encrypt the stuff before inserting later on
-    const pwd = encryptPassword();
-    console.log(pwd);
-
-    connection.connect();
-    connection.query('INSERT INTO user VALUES ("", ?, ?, date)', [username, pwd, date], function (error, results, fields)
-    {
-        connection.end();
-        if (error == true) throw error;
-        res.json(results);
-    });
-});
-
-// Testing route
-app.get('/insert', async (req, res) => 
-{
     console.log("insert accessed")
-    // Testing
-    username = "Mario"
-    pwd = encryptPassword("MarioIsItalian")
+    username = "RAdwfages"
+    pwd = encryptPassword("agrtaetwgrhstrjh")
     date = transformDate();
 
-    sqlInsertQuery = "INSERT INTO `user` (`id`, `username`, `password`, `signedup`) VALUES (`"+ username + "`,`" + pwd + "`, `" + date + "`)"
-    connection.connect(function(err) 
+    //connection.connect();
+    connection.query("INSERT INTO `user` (`id`, `username`, `password`, `signedup`) VALUES (NULL, '" + username + "', '" + pwd + "', '" + date + "');", function (error, results, fields)
     {
-        if (err) throw err;
-        console.log("Connected!");
-        var sql = "INSERT INTO `user` (`id`, `username`, `password`, `signedup`) VALUES (NULL, '" + username + "', '" + pwd + "', '" + date + "');";
-        connection.query(sql, function (err, result) 
-        {
-          if (err) throw err;
-          console.log("1 record inserted");
-        });
-      });
-    /*connection.connect();
-    connection.query(sqlInsertQuery, function (error, results, fields)
-    {
-        connection.end();
         if (error == true) throw error;
+        console.log("1 record inserted");
         res.json(results);
-    });*/
+    });
 });
 
 
@@ -103,22 +71,9 @@ app.listen(port, () =>
 });
 
 
+
+
 // References:
 // https://stackoverflow.com/questions/5129624/convert-js-date-time-to-mysql-datetime - for date conversion to MYSQL
+// https://www.w3schools.com/nodejs/nodejs_mysql_insert.asp - For connection
 
-
-
-// Backup 
-/* 
-connection.connect(function(err) 
-    {
-        if (err) throw err;
-        console.log("Connected!");
-        var sql = "INSERT INTO `user` (`id`, `username`, `password`, `signedup`) VALUES (NULL, 'user3', 'pass3', '2020-11-11');";
-        connection.query(sql, function (err, result) 
-        {
-          if (err) throw err;
-          console.log("1 record inserted");
-        });
-      });
-      */
